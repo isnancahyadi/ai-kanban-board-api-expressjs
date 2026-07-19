@@ -6,6 +6,9 @@
     "moduleDetection": "force",
     "types": ["bun"],
 
+    "rewriteRelativeImportExtensions": true,
+    "erasableSyntaxOnly": true,
+
     // Bundler mode
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
