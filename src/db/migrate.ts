@@ -13,13 +13,13 @@ const runMigrate = async () => {
     port: Number(env.DB_PORT),
     user: env.DB_USER,
     password: env.DB_PASSWORD,
-    max: 1
-  })
+    max: 1,
+  });
 
-  const db = drizzle(migrationPool)
+  const db = drizzle(migrationPool);
 
   try {
-    await migrate(db, { migrationsFolder: config.out! })
+    await migrate(db, { migrationsFolder: config.out! });
 
     console.log("✅ Database migration successfully!");
   } catch (error) {
@@ -28,6 +28,6 @@ const runMigrate = async () => {
   } finally {
     await migrationPool.end();
   }
-}
+};
 
 runMigrate();

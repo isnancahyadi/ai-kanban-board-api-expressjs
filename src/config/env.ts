@@ -1,4 +1,4 @@
-import z, { ZodError } from "zod"
+import z, { ZodError } from "zod";
 
 const EnvSchema = z.object({
   NODE_ENV: z.enum(["development", "production"]),
@@ -14,24 +14,24 @@ const EnvSchema = z.object({
   JWT_EXPIRES_IN: z.string(),
   GEMINI_API_KEY: z.string(),
   GEMINI_MODEL: z.string(),
-})
+});
 
-export type EnvVars = z.infer<typeof EnvSchema>
+export type EnvVars = z.infer<typeof EnvSchema>;
 
-let env: EnvVars
+let env: EnvVars;
 
 try {
-  env = EnvSchema.parse(process.env)
+  env = EnvSchema.parse(process.env);
 } catch (error) {
   if (error instanceof ZodError) {
-    console.error("Missing required values in .env")
+    console.error("Missing required values in .env");
     error.issues.forEach((issue) => {
-      console.error(` - ${issue.path.join(".")}: ${issue.message}`)
-    })
-    process.exit(1)
+      console.error(` - ${issue.path.join(".")}: ${issue.message}`);
+    });
+    process.exit(1);
   } else {
-    throw error
+    throw error;
   }
 }
 
-export { env }
+export { env };

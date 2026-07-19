@@ -5,5 +5,5 @@ export const timestamps = {
   updatedAt: timestamp("updated_at", { withTimezone: true })
     .defaultNow()
     .notNull()
-    .$onUpdate(() => new Date())
-}
+    .$onUpdate(() => new Date()),
+};

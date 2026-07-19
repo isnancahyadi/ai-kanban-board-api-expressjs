@@ -8,5 +8,5 @@ export const usersTable = pgTable("users", {
   email: t.text().unique().notNull(),
   password: t.varchar({ length: 16 }).notNull(),
   avatarUrl: t.text("avatar_url"),
-  ...timestamps
-})
+  ...timestamps,
+});

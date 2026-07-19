@@ -8,9 +8,9 @@ const pool = new Pool({
   database: env.DB_NAME,
   port: Number(env.DB_PORT),
   user: env.DB_USER,
-  password: env.DB_PASSWORD
-})
+  password: env.DB_PASSWORD,
+});
 
-const db = drizzle({ client: pool, schema, logger: true })
+const db = drizzle({ client: pool, schema, logger: true });
 
-export default db
+export default db;
