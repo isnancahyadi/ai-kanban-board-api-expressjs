@@ -2,6 +2,7 @@ import z, { ZodError } from "zod"
 
 const EnvSchema = z.object({
   NODE_ENV: z.enum(["development", "production"]),
+  CLIENT_URL: z.string(),
   PORT: z.string(),
   DB_HOST: z.string(),
   DB_USER: z.string(),
@@ -33,4 +34,4 @@ try {
   }
 }
 
-export {env}
+export { env }
