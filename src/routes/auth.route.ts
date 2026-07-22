@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { AuthController } from "~/controller/auth.controller";
-import { validateRequest } from "~/middleware";
+import { requireAuth, validateRequest } from "~/middleware";
 import { AuthServices } from "~/services/auth.service";
 import { asyncHandler } from "~/utils";
 import { LoginSchema, RegisterSchema } from "~/validation/auth.validation";
@@ -16,5 +16,7 @@ authRouter.post(
   asyncHandler(authController.register),
 );
 authRouter.post("/login", validateRequest(LoginSchema), asyncHandler(authController.login));
+
+authRouter.get("/me", requireAuth, asyncHandler(authController.me));
 
 export default authRouter;

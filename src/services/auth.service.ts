@@ -70,4 +70,21 @@ export class AuthServices {
       token,
     };
   }
+
+  async me(id: string) {
+    const me = await db
+      .select({
+        id: usersTable.id,
+        name: usersTable.name,
+        avatarUrl: usersTable.avatarUrl,
+        createdAt: usersTable.createdAt,
+      })
+      .from(usersTable)
+      .where(eq(usersTable.id, id))
+      .limit(1);
+
+    if (!me.length) throw ApiError.notFound("User not found");
+
+    return me[0];
+  }
 }
