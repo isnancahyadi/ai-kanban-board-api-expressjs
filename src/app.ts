@@ -2,7 +2,7 @@ import cors from "cors";
 import express, { type Application } from "express";
 import helmet from "helmet";
 import { env } from "./config/env";
-import { errorHandler } from "./middleware";
+import { errorHandler, notFoundHandler } from "./middleware";
 import apiRouter from "./routes";
 
 const app: Application = express();
@@ -30,6 +30,7 @@ app.get("/", (_req, res) => {
 
 app.use("/api", apiRouter);
 
+app.use(notFoundHandler);
 app.use(errorHandler);
 
 export default app;
