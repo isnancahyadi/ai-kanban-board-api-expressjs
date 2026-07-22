@@ -2,8 +2,12 @@ import type { NextFunction, Request, Response } from "express";
 import type { SignTokenPayload } from "~/types";
 import { ApiError, verifyToken } from "~/utils";
 
-interface AuthRequest extends Request {
+export interface AuthRequest extends Request {
   user?: SignTokenPayload;
+}
+
+export interface AuthenticatedRequest extends Request {
+  user: SignTokenPayload;
 }
 
 export const requireAuth = (req: AuthRequest, _res: Response, next: NextFunction) => {
