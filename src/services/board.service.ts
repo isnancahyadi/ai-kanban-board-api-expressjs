@@ -1,7 +1,10 @@
 import { and, desc, eq, getTableColumns, or, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
+import { DEFAULT_COLUMNS } from "~/constants";
 import db from "~/db";
-import { boardMembersTable, boardsTable, tasksTable } from "~/db/schema";
+import { boardMembersTable, boardsTable, columnsTable, tasksTable } from "~/db/schema";
+import { ApiError } from "~/utils";
+import type { BoardInputType } from "~/validation/board.validation";
 
 export class BoardServices {
   async listBoards(userId: string) {
@@ -30,5 +33,38 @@ export class BoardServices {
     return {
       boards: rows,
     };
+  }
+
+  async createBoard(data: BoardInputType, userId: string) {
+    const board = await db.transaction(async (tx) => {
+      const rows = await tx
+        .insert(boardsTable)
+        .values({
+          title: data.title,
+          description: data.description,
+          color: data.color,
+          ownerId: userId,
+        })
+        .returning();
+      const rowData = rows[0];
+
+      if (!rowData) throw ApiError.internalServerError("Failed to create board");
+      await tx.insert(boardMembersTable).values({
+        boardId: rowData.id,
+        userId,
+        role: "owner",
+      });
+
+      for (const [i, columnTitle] of DEFAULT_COLUMNS.entries()) {
+        await tx.insert(columnsTable).values({
+          boardId: rowData.id,
+          title: columnTitle,
+          position: (i + 1) * 1000,
+        });
+      }
+      return rowData;
+    });
+
+    return { board };
   }
 }

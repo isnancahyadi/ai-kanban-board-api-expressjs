@@ -11,6 +11,7 @@ const boardController = new BoardController(boardService);
 
 boardRouter.use(requireAuth);
 
-boardRouter.get("/", asyncHandler(boardController.list));
+boardRouter.get("/", asyncHandler(boardController.listBoards));
+boardRouter.post("/", asyncHandler(boardController.createBoard));
 
 export default boardRouter;
