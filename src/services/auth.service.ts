@@ -2,8 +2,8 @@ import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 import db from "~/db";
 import { usersTable } from "~/db/schema";
-import { ApiError, signToken } from "~/utils";
-import type { RegisterInputType } from "~/validation/auth.validation";
+import { ApiError, formatUserResponse, signToken } from "~/utils";
+import type { LoginInputType, RegisterInputType } from "~/validation/auth.validation";
 
 export class AuthServices {
   async register(data: RegisterInputType) {
@@ -36,9 +36,7 @@ export class AuthServices {
 
     const newUser = insertData[0];
 
-    if (!newUser) {
-      throw ApiError.internalServerError("Failed to create user");
-    }
+    if (!newUser) throw ApiError.internalServerError("Failed to create user");
 
     const token = signToken({
       id: newUser.id,
@@ -47,7 +45,28 @@ export class AuthServices {
     });
 
     return {
-      user: newUser,
+      user: formatUserResponse(newUser),
+      token,
+    };
+  }
+
+  async login(data: LoginInputType) {
+    const user = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.email, data.email))
+      .limit(1);
+
+    const foundUser = user[0];
+    if (!foundUser) throw ApiError.unauthorized("Invalid email or password");
+
+    const isPasswordMatch = await bcrypt.compare(data.password, foundUser.password);
+    if (!isPasswordMatch) throw ApiError.unauthorized("Invalid email or password");
+
+    const token = signToken({ id: foundUser.id, name: foundUser.name, email: foundUser.email });
+
+    return {
+      user: formatUserResponse(foundUser),
       token,
     };
   }

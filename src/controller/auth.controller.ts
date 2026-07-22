@@ -14,4 +14,9 @@ export class AuthController extends BaseController {
     const user = await this.authService.register(req.body);
     return this.sendSuccess(res, user, "User registered successfully");
   };
+
+  login = async (req: Request, res: Response) => {
+    const data = await this.authService.login(req.body);
+    return this.sendSuccess(res, data, "Login successfully");
+  };
 }

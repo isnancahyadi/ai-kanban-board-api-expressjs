@@ -3,7 +3,7 @@ import { AuthController } from "~/controller/auth.controller";
 import { validateRequest } from "~/middleware";
 import { AuthServices } from "~/services/auth.service";
 import { asyncHandler } from "~/utils";
-import { RegisterSchema } from "~/validation/auth.validation";
+import { LoginSchema, RegisterSchema } from "~/validation/auth.validation";
 
 const authRouter = Router();
 
@@ -15,5 +15,6 @@ authRouter.post(
   validateRequest(RegisterSchema),
   asyncHandler(authController.register),
 );
+authRouter.post("/login", validateRequest(LoginSchema), asyncHandler(authController.login));
 
 export default authRouter;
