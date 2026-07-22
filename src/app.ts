@@ -2,6 +2,7 @@ import cors from "cors";
 import express, { type Application } from "express";
 import helmet from "helmet";
 import { env } from "./config/env";
+import apiRouter from "./routes";
 
 const app: Application = express();
 
@@ -25,5 +26,7 @@ app.get("/", (_req, res) => {
     uptime: process.uptime(),
   });
 });
+
+app.use("/api", apiRouter);
 
 export default app;
