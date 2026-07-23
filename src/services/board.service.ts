@@ -1,8 +1,9 @@
-import { and, desc, eq, getTableColumns, or, sql } from "drizzle-orm";
+import { and, asc, desc, eq, getTableColumns, or, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import { DEFAULT_COLUMNS } from "~/constants";
 import db from "~/db";
-import { boardMembersTable, boardsTable, columnsTable, tasksTable } from "~/db/schema";
+import { boardMembersTable, boardsTable, columnsTable, tasksTable, usersTable } from "~/db/schema";
+import type { BoardRoleType } from "~/types/schema";
 import { ApiError } from "~/utils";
 import type { BoardInputType } from "~/validation/board.validation";
 
@@ -66,5 +67,48 @@ export class BoardServices {
     });
 
     return { board };
+  }
+
+  async getBoard(boardId: string, boardRole: BoardRoleType) {
+    const [boardRes, columnsRes, tasksRes, membersRes] = await Promise.all([
+      db.select().from(boardsTable).where(eq(boardsTable.id, boardId)),
+      db
+        .select()
+        .from(columnsTable)
+        .where(eq(columnsTable.boardId, boardId))
+        .orderBy(asc(columnsTable.position)),
+      db
+        .select({
+          ...getTableColumns(tasksTable),
+          assigneeName: sql<string>`${usersTable.name}`.as("assignee_name"),
+          assigneeEmail: sql<string>`${usersTable.email}`.as("assignee_email"),
+          assigneeAvatar: sql<string>`${usersTable.avatarUrl}`.as("assignee_avatar"),
+        })
+        .from(tasksTable)
+        .leftJoin(usersTable, eq(usersTable.id, tasksTable.assigneeId))
+        .where(eq(tasksTable.boardId, boardId))
+        .orderBy(asc(tasksTable.position)),
+      db
+        .select({
+          id: usersTable.id,
+          name: usersTable.name,
+          email: usersTable.email,
+          avatarUrl: sql<string>`${usersTable.avatarUrl}`.as("avatar_url"),
+          role: boardMembersTable.role,
+          joinedAt: sql<string>`${boardMembersTable.joinedAt}`.as("joined_at"),
+        })
+        .from(boardMembersTable)
+        .innerJoin(usersTable, eq(usersTable.id, boardMembersTable.userId))
+        .where(eq(boardMembersTable.boardId, boardId))
+        .orderBy(asc(boardMembersTable.joinedAt)),
+    ]);
+
+    return {
+      board: boardRes[0],
+      columns: columnsRes,
+      tasks: tasksRes,
+      members: membersRes,
+      role: boardRole,
+    };
   }
 }

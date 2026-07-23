@@ -32,7 +32,7 @@ export const boardMembersTable = pgTable(
       .uuid("user_id")
       .notNull()
       .references(() => usersTable.id, { onDelete: "cascade" }),
-    role: roleEnum().default("member"),
+    role: roleEnum().default("member").notNull(),
     joinedAt: t.timestamp("joined_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [

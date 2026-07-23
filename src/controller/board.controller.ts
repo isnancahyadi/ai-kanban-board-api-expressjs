@@ -20,4 +20,9 @@ export class BoardController extends BaseController {
     const data = await this.boardService.createBoard(req.body, req.user.id);
     return this.sendSuccess(res, data, "Board created");
   };
+
+  getBoard = async (req: AuthenticatedRequest, res: Response) => {
+    const board = await this.boardService.getBoard(req.board.id, req.board.role);
+    return this.sendSuccess(res, board, "Get board successfully");
+  };
 }
