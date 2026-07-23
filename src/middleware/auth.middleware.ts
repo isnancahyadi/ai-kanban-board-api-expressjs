@@ -1,6 +1,11 @@
+import type { InferSelectModel } from "drizzle-orm";
 import type { NextFunction, Request, Response } from "express";
+import type { boardMembersTable, boardsTable } from "~/db/schema";
 import type { SignTokenPayload } from "~/types";
 import { ApiError, verifyToken } from "~/utils";
+
+export type BoardType = InferSelectModel<typeof boardsTable>;
+export type BoardMemberType = InferSelectModel<typeof boardMembersTable>;
 
 export interface AuthRequest extends Request {
   user?: SignTokenPayload;
@@ -8,6 +13,7 @@ export interface AuthRequest extends Request {
 
 export interface AuthenticatedRequest extends Request {
   user: SignTokenPayload;
+  board: Pick<BoardType, "id" | "ownerId"> & Pick<BoardMemberType, "role">;
 }
 
 export const requireAuth = (req: AuthRequest, _res: Response, next: NextFunction) => {
