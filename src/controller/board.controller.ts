@@ -1,6 +1,7 @@
 import type { Response } from "express";
 import type { AuthenticatedRequest } from "~/middleware";
 import type { BoardServices } from "~/services/board.service";
+import { emitToBoard } from "~/socket/emitter";
 import { BaseController } from "./base.controller";
 
 export class BoardController extends BaseController {
@@ -24,5 +25,11 @@ export class BoardController extends BaseController {
   getBoard = async (req: AuthenticatedRequest, res: Response) => {
     const board = await this.boardService.getBoard(req.board.id, req.board.role);
     return this.sendSuccess(res, board, "Get board successfully");
+  };
+
+  updateBoard = async (req: AuthenticatedRequest, res: Response) => {
+    const { board } = await this.boardService.updateBoard(req.board.id, req.body);
+    emitToBoard(req.board.id, "board:update", board);
+    return this.sendSuccess(res, { board }, "Board updated successfully");
   };
 }

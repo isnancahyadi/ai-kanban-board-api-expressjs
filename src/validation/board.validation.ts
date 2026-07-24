@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const BoardSchema = z
+export const CreateBoardSchema = z
   .object({
     title: z
       .string({
@@ -17,4 +17,18 @@ export const BoardSchema = z
     title: true,
   });
 
-export type BoardInputType = z.infer<typeof BoardSchema>;
+export type CreateBoardInputType = z.infer<typeof CreateBoardSchema>;
+
+export const UpdateBoardSchema = z.object({
+  title: z
+    .string()
+    .regex(
+      /^[a-zA-Z\s\-']+$/,
+      "Board title may only contain letters, spaces, and special characters like (') and (-)",
+    )
+    .optional(),
+  description: z.string().nullable().optional(),
+  color: z.string().optional(),
+});
+
+export type UpdateBoardInputType = z.infer<typeof UpdateBoardSchema>;
