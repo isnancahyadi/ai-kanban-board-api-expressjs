@@ -15,5 +15,6 @@ boardRouter.get("/", asyncHandler(boardController.listBoards));
 boardRouter.post("/", asyncHandler(boardController.createBoard));
 
 boardRouter.get("/:boardId", requireBoardAccess, asyncHandler(boardController.getBoard));
+boardRouter.patch("/:boardId", requireBoardAccess, asyncHandler(boardController.updateBoard));
 
 export default boardRouter;

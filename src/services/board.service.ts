@@ -5,7 +5,7 @@ import db from "~/db";
 import { boardMembersTable, boardsTable, columnsTable, tasksTable, usersTable } from "~/db/schema";
 import type { BoardRoleType } from "~/types/schema";
 import { ApiError } from "~/utils";
-import type { BoardInputType } from "~/validation/board.validation";
+import type { CreateBoardInputType, UpdateBoardInputType } from "~/validation/board.validation";
 
 export class BoardServices {
   async listBoards(userId: string) {
@@ -36,7 +36,7 @@ export class BoardServices {
     };
   }
 
-  async createBoard(data: BoardInputType, userId: string) {
+  async createBoard(data: CreateBoardInputType, userId: string) {
     const board = await db.transaction(async (tx) => {
       const rows = await tx
         .insert(boardsTable)
@@ -118,5 +118,20 @@ export class BoardServices {
       members: membersRes,
       role: boardRole,
     };
+  }
+
+  async updateBoard(boardId: string, data: UpdateBoardInputType) {
+    const rows = await db
+      .update(boardsTable)
+      .set({
+        ...data,
+      })
+      .where(eq(boardsTable.id, boardId))
+      .returning();
+
+    const rowData = rows[0];
+    if (!rowData) throw ApiError.internalServerError("Failed to update board");
+
+    return { board: rowData };
   }
 }
