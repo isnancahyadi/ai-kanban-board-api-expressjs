@@ -70,37 +70,45 @@ export class BoardServices {
   }
 
   async getBoard(boardId: string, boardRole: BoardRoleType) {
+    const boardQuery = db.select().from(boardsTable).where(eq(boardsTable.id, boardId));
+
+    const columnsQuery = db
+      .select()
+      .from(columnsTable)
+      .where(eq(columnsTable.boardId, boardId))
+      .orderBy(asc(columnsTable.position));
+
+    const tasksQuery = db
+      .select({
+        ...getTableColumns(tasksTable),
+        assigneeName: usersTable.name,
+        assigneeEmail: usersTable.email,
+        assigneeAvatar: usersTable.avatarUrl,
+      })
+      .from(tasksTable)
+      .leftJoin(usersTable, eq(usersTable.id, tasksTable.assigneeId))
+      .where(eq(tasksTable.boardId, boardId))
+      .orderBy(asc(tasksTable.position));
+
+    const membersQuery = db
+      .select({
+        id: usersTable.id,
+        name: usersTable.name,
+        email: usersTable.email,
+        avatarUrl: usersTable.avatarUrl,
+        role: boardMembersTable.role,
+        joinedAt: boardMembersTable.joinedAt,
+      })
+      .from(boardMembersTable)
+      .innerJoin(usersTable, eq(usersTable.id, boardMembersTable.userId))
+      .where(eq(boardMembersTable.boardId, boardId))
+      .orderBy(asc(boardMembersTable.joinedAt));
+
     const [boardRes, columnsRes, tasksRes, membersRes] = await Promise.all([
-      db.select().from(boardsTable).where(eq(boardsTable.id, boardId)),
-      db
-        .select()
-        .from(columnsTable)
-        .where(eq(columnsTable.boardId, boardId))
-        .orderBy(asc(columnsTable.position)),
-      db
-        .select({
-          ...getTableColumns(tasksTable),
-          assigneeName: sql<string>`${usersTable.name}`.as("assignee_name"),
-          assigneeEmail: sql<string>`${usersTable.email}`.as("assignee_email"),
-          assigneeAvatar: sql<string>`${usersTable.avatarUrl}`.as("assignee_avatar"),
-        })
-        .from(tasksTable)
-        .leftJoin(usersTable, eq(usersTable.id, tasksTable.assigneeId))
-        .where(eq(tasksTable.boardId, boardId))
-        .orderBy(asc(tasksTable.position)),
-      db
-        .select({
-          id: usersTable.id,
-          name: usersTable.name,
-          email: usersTable.email,
-          avatarUrl: sql<string>`${usersTable.avatarUrl}`.as("avatar_url"),
-          role: boardMembersTable.role,
-          joinedAt: sql<string>`${boardMembersTable.joinedAt}`.as("joined_at"),
-        })
-        .from(boardMembersTable)
-        .innerJoin(usersTable, eq(usersTable.id, boardMembersTable.userId))
-        .where(eq(boardMembersTable.boardId, boardId))
-        .orderBy(asc(boardMembersTable.joinedAt)),
+      boardQuery,
+      columnsQuery,
+      tasksQuery,
+      membersQuery,
     ]);
 
     return {

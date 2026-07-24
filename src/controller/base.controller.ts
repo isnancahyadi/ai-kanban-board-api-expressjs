@@ -1,4 +1,5 @@
 import type { Response } from "express";
+import snakecaseKeys from "snakecase-keys";
 import type { StatusCode } from "~/types";
 
 export abstract class BaseController {
@@ -11,7 +12,7 @@ export abstract class BaseController {
     return res.status(statusCode).json({
       status: "OK",
       message,
-      data,
+      data: data ? snakecaseKeys(data, { deep: true }) : null,
     });
   }
 }
