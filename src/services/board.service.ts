@@ -186,4 +186,26 @@ export class BoardServices {
       },
     };
   }
+
+  async removeMember({
+    boardId,
+    boardRole,
+    ownerId,
+    userId,
+  }: {
+    boardId: string;
+    boardRole: BoardRoleType;
+    ownerId: string;
+    userId: string;
+  }) {
+    if (boardRole !== "owner" && boardRole !== "admin")
+      throw ApiError.forbidden("Only owners or admins can remove members");
+    if (userId === ownerId) throw ApiError.badRequest("Cannot remove the board owner");
+
+    await db
+      .delete(boardMembersTable)
+      .where(and(eq(boardMembersTable.boardId, boardId), eq(boardMembersTable.userId, userId)));
+
+    return { success: true };
+  }
 }

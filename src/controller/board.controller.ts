@@ -52,4 +52,15 @@ export class BoardController extends BaseController {
 
     return this.sendSuccess(res, { member }, "Member added successfully", 201);
   };
+
+  removeMember = async (req: AuthenticatedRequest, res: Response) => {
+    const data = await this.boardService.removeMember({
+      boardId: req.board.id,
+      boardRole: req.board.role,
+      ownerId: req.board.ownerId,
+      userId: req.params.userId as string,
+    });
+
+    return this.sendSuccess(res, data, "Member removed successfully");
+  };
 }
