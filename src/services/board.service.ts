@@ -134,4 +134,14 @@ export class BoardServices {
 
     return { board: rowData };
   }
+
+  async deleteBoard(boardId: string, boardRole: BoardRoleType) {
+    if (boardRole !== "owner") {
+      throw ApiError.forbidden("Only the owner can delete this board");
+    }
+
+    await db.delete(boardsTable).where(eq(boardsTable.id, boardId));
+
+    return { id: boardId };
+  }
 }

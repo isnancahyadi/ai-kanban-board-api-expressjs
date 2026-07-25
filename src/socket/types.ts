@@ -17,6 +17,8 @@ export interface ServerToClientEvents {
   "presence:cursor": (data: { user: Omit<SocketUser, "email">; x: number; y: number }) => void;
   "activity:new": (activity: Activity) => void;
   "board:update": (board: Board) => void;
+  "board:delete": (data: { id: string }) => void;
+  "board:deleted": (data: { id: string }) => void;
 }
 
 export interface ClientToServerEvents {
