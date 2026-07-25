@@ -38,5 +38,10 @@ boardRouter.post(
   validateRequest(AddMemberSchema),
   asyncHandler(boardController.addMember),
 );
+boardRouter.delete(
+  "/:boardId/members/:userId",
+  requireBoardAccess,
+  asyncHandler(boardController.removeMember),
+);
 
 export default boardRouter;
