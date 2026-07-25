@@ -1,0 +1,90 @@
+openapi: 3.0.0
+info:
+  title: Components Fragment Schemas
+  version: 1.0.0
+paths: {}
+
+components:
+  schemas:
+    ValidationError:
+      type: object
+      properties:
+        field:
+          type: string
+          example: email
+        message:
+          type: string
+          example: Invalid email address
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: FAILED
+        message:
+          type: string
+          example: Validation Error
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          nullable: true
+    BaseResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: OK
+        message:
+          type: string
+          example: Success
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          example: john@example.com
+        avatar_url:
+          type: string
+          nullable: true
+          example: https://example.com/avatar.jpg
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Board:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+        title:
+          type: string
+          example: Project Alpha
+        description:
+          type: string
+          nullable: true
+          example: Main project board
+        color:
+          type: string
+          example: "#6366F1"
+        owner_id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174001
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time

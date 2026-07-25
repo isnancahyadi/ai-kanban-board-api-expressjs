@@ -35,3 +35,6 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # File DB Migration
 src/db/migrations
+
+# File API Swagger Doc Generated
+src/docs/swagger-output.json
