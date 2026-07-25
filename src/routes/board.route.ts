@@ -16,5 +16,6 @@ boardRouter.post("/", asyncHandler(boardController.createBoard));
 
 boardRouter.get("/:boardId", requireBoardAccess, asyncHandler(boardController.getBoard));
 boardRouter.patch("/:boardId", requireBoardAccess, asyncHandler(boardController.updateBoard));
+boardRouter.delete("/:boardId", requireBoardAccess, asyncHandler(boardController.deleteBoard));
 
 export default boardRouter;

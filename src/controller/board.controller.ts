@@ -32,4 +32,10 @@ export class BoardController extends BaseController {
     emitToBoard(req.board.id, "board:update", board);
     return this.sendSuccess(res, { board }, "Board updated successfully");
   };
+
+  deleteBoard = async (req: AuthenticatedRequest, res: Response) => {
+    const data = await this.boardService.deleteBoard(req.board.id, req.board.role);
+    emitToBoard(req.board.id, "board:deleted", data);
+    return this.sendSuccess(res, null, "Board deleted successfully");
+  };
 }
