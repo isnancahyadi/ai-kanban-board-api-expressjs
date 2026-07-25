@@ -1,7 +1,7 @@
 import type { Response } from "express";
 import type { AuthenticatedRequest } from "~/middleware";
 import type { BoardServices } from "~/services/board.service";
-import { emitToBoard } from "~/socket/emitter";
+import { emitToBoard, logActivity } from "~/socket/emitter";
 import { BaseController } from "./base.controller";
 
 export class BoardController extends BaseController {
@@ -37,5 +37,19 @@ export class BoardController extends BaseController {
     const data = await this.boardService.deleteBoard(req.board.id, req.board.role);
     emitToBoard(req.board.id, "board:deleted", data);
     return this.sendSuccess(res, null, "Board deleted successfully");
+  };
+
+  addMember = async (req: AuthenticatedRequest, res: Response) => {
+    const { member } = await this.boardService.addMember(req.board.id, req.board.role, req.body);
+
+    await logActivity({
+      boardId: req.board.id,
+      userId: req.user.id,
+      action: "member.added",
+      message: `${req.user.name} added ${member.name} to the board`,
+      metadata: { memberId: member.id },
+    });
+
+    return this.sendSuccess(res, { member }, "Member added successfully", 201);
   };
 }
