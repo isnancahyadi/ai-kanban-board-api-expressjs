@@ -5,7 +5,11 @@ import db from "~/db";
 import { boardMembersTable, boardsTable, columnsTable, tasksTable, usersTable } from "~/db/schema";
 import type { BoardRoleType } from "~/types/schema";
 import { ApiError } from "~/utils";
-import type { CreateBoardInputType, UpdateBoardInputType } from "~/validation/board.validation";
+import type {
+  AddMemberInputType,
+  CreateBoardInputType,
+  UpdateBoardInputType,
+} from "~/validation/board.validation";
 
 export class BoardServices {
   async listBoards(userId: string) {
@@ -143,5 +147,43 @@ export class BoardServices {
     await db.delete(boardsTable).where(eq(boardsTable.id, boardId));
 
     return { id: boardId };
+  }
+
+  async addMember(boardId: string, boardRole: BoardRoleType, data: AddMemberInputType) {
+    if (boardRole !== "owner" && boardRole !== "admin")
+      throw ApiError.forbidden("Only owners or admins can add members");
+
+    const userRes = await db
+      .select({
+        id: usersTable.id,
+        name: usersTable.name,
+        email: usersTable.email,
+        avatarUrl: usersTable.avatarUrl,
+      })
+      .from(usersTable)
+      .where(eq(usersTable.email, data.email))
+      .limit(1);
+
+    const user = userRes[0];
+    if (!user) throw ApiError.notFound("No user found with that email");
+
+    await db
+      .insert(boardMembersTable)
+      .values({
+        boardId,
+        userId: user.id,
+        role: data.role,
+      })
+      .onConflictDoUpdate({
+        target: [boardMembersTable.boardId, boardMembersTable.userId],
+        set: { role: data.role },
+      });
+
+    return {
+      member: {
+        ...user,
+        role: data.role,
+      },
+    };
   }
 }

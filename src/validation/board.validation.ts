@@ -32,3 +32,15 @@ export const UpdateBoardSchema = z.object({
 });
 
 export type UpdateBoardInputType = z.infer<typeof UpdateBoardSchema>;
+
+export const AddMemberSchema = z.object({
+  email: z.email({
+    error: (issue) =>
+      issue.input === undefined
+        ? "Email address is required"
+        : "Please provide a valid email address",
+  }),
+  role: z.enum(["admin", "member"]).default("member"),
+});
+
+export type AddMemberInputType = z.infer<typeof AddMemberSchema>;
