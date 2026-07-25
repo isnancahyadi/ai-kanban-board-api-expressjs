@@ -13,5 +13,11 @@
   },
   "[json]": {
     "editor.defaultFormatter": "biomejs.biome"
+  },
+  "yaml.disableSchemaDetection": [
+    "file:///home/isnanarifc/Documents/project/ai-kanban-v2/backend-expressjs/src/docs/schemas.yaml"
+  ],
+  "yaml.schemas": {
+    "https://www.schemastore.org/openapi-3.X.json": "file:///home/isnanarifc/Documents/project/ai-kanban-v2/backend-expressjs/src/docs/schemas.yaml"
   }
 }

@@ -2,6 +2,7 @@ import cors from "cors";
 import express, { type Application } from "express";
 import helmet from "helmet";
 import { env } from "./config/env";
+import { setupSwagger } from "./config/swagger";
 import { errorHandler, notFoundHandler } from "./middleware";
 import apiRouter from "./routes";
 
@@ -27,6 +28,8 @@ app.get("/", (_req, res) => {
     uptime: process.uptime(),
   });
 });
+
+await setupSwagger(app);
 
 app.use("/api", apiRouter);
 

@@ -1,0 +1,32 @@
+openapi: 3.0.0
+info:
+  title: AI Kanban Board API
+  version: 1.0.0
+  description: API documentation for the AI-powered Kanban Board
+servers:
+  - url: "http://localhost:5050/api/v1"
+    description: Development Server
+tags:
+  - name: Auth
+    description: Authentication operations
+  - name: Board
+    description: Board operations
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+paths:
+  /auth/register:
+    $ref: './auth/register.yaml#/paths/~1auth~1register'
+  /auth/login:
+    $ref: './auth/login.yaml#/paths/~1auth~1login'
+  /auth/me:
+    $ref: './auth/me.yaml#/paths/~1auth~1me'
+  
+  /boards:
+    $ref: './board/list-boards.yaml#/paths/~1boards'
+  /boards/{boardId}:
+    $ref: './board/detail-board.yaml#/paths/~1boards~1{boardId}'
+  
