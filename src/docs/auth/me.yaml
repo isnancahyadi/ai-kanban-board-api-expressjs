@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.1.0
 info:
   title: Endpoint Login
   version: 1.0.0
@@ -11,19 +11,17 @@ paths:
         - bearerAuth: []
       responses:
         '200':
-          description: Returns user profile
+          description: Get user profile successful
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '../schemas.yaml#/components/schemas/BaseResponse'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '../schemas.yaml#/components/schemas/User'
+                $ref: '../schemas.yaml#/components/schemas/UserProfileResponse'
         '401':
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '../schemas.yaml#/components/schemas/ErrorResponse'
+          $ref: '../responses.yaml#/components/responses/ErrorResponse'
+        '404':
+          description: Data not found
+          $ref: '../responses.yaml#/components/responses/ErrorResponse'
+        '500':
+          description: Internal server error
+          $ref: '../responses.yaml#/components/responses/ErrorResponse'

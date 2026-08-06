@@ -58,10 +58,10 @@ export class AuthServices {
       .limit(1);
 
     const foundUser = user[0];
-    if (!foundUser) throw ApiError.unauthorized("Invalid email or password");
+    if (!foundUser) throw ApiError.badRequest("Invalid email or password");
 
     const isPasswordMatch = await bcrypt.compare(data.password, foundUser.password);
-    if (!isPasswordMatch) throw ApiError.unauthorized("Invalid email or password");
+    if (!isPasswordMatch) throw ApiError.badRequest("Invalid email or password");
 
     const token = signToken({ id: foundUser.id, name: foundUser.name, email: foundUser.email });
 

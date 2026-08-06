@@ -2,6 +2,7 @@ import type { Response } from "express";
 import type { AuthenticatedRequest } from "~/middleware";
 import type { BoardServices } from "~/services/board.service";
 import { emitToBoard, logActivity } from "~/socket/emitter";
+import { HttpStatusCode } from "~/types";
 import { BaseController } from "./base.controller";
 
 export class BoardController extends BaseController {
@@ -19,7 +20,7 @@ export class BoardController extends BaseController {
 
   createBoard = async (req: AuthenticatedRequest, res: Response) => {
     const data = await this.boardService.createBoard(req.body, req.user.id);
-    return this.sendSuccess(res, data, "Board created");
+    return this.sendSuccess(res, data, "Board created", HttpStatusCode.CREATED);
   };
 
   getBoard = async (req: AuthenticatedRequest, res: Response) => {

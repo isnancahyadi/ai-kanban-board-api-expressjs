@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.1.0
 info:
   title: AI Kanban Board API
   version: 1.0.0
@@ -12,6 +12,38 @@ tags:
   - name: Board
     description: Board operations
 components:
+  schemas:
+    Success:
+      $ref: './schemas.yaml#/components/schemas/Success'
+    Error:
+      $ref: './schemas.yaml#/components/schemas/Error'
+    BoardCreateRequest:
+      $ref: './schemas.yaml#/components/schemas/BoardCreateRequest'
+    BoardsListResponse:
+      $ref: './schemas.yaml#/components/schemas/BoardsListResponse'
+    BoardUpdateRequest:
+      $ref: './schemas.yaml#/components/schemas/BoardUpdateRequest'
+    DetailBoardResponse:
+      $ref: './schemas.yaml#/components/schemas/DetailBoardResponse'
+    LoginRequest:
+      $ref: './schemas.yaml#/components/schemas/LoginRequest'
+    RegisterRequest:
+      $ref: './schemas.yaml#/components/schemas/RegisterRequest'
+    UserProfileResponse:
+      $ref: './schemas.yaml#/components/schemas/UserProfileResponse'
+  responses:
+    ErrorResponse:
+      $ref: './responses.yaml#/components/responses/ErrorResponse'
+    BoardCreateSuccessResponse:
+      $ref: './responses.yaml#/components/responses/BoardCreateSuccessResponse'
+    BoardUpdateSuccessResponse:
+      $ref: './responses.yaml#/components/responses/BoardUpdateSuccessResponse'
+    UserLoginSuccessResponse:
+      $ref: './responses.yaml#/components/responses/UserLoginSuccessResponse'
+    UserRegisterSuccessResponse:
+      $ref: './responses.yaml#/components/responses/UserRegisterSuccessResponse'
+    ValidationErrorResponse:
+      $ref: './responses.yaml#/components/responses/ValidationErrorResponse'
   securitySchemes:
     bearerAuth:
       type: http
@@ -26,7 +58,7 @@ paths:
     $ref: './auth/me.yaml#/paths/~1auth~1me'
   
   /boards:
-    $ref: './board/list-boards.yaml#/paths/~1boards'
-  /boards/{boardId}:
-    $ref: './board/detail-board.yaml#/paths/~1boards~1{boardId}'
+    $ref: './board/boards.yaml#/paths/~1boards'
+  /boards/{board_id}:
+    $ref: './board/board-by-id.yaml#/paths/~1boards~1{board_id}'
   

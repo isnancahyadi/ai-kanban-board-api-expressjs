@@ -1,0 +1,48 @@
+openapi: 3.1.0
+info:
+  title: Endpoint Boards
+  version: 1.0.0
+paths:
+  /boards:
+    get:
+      summary: Get list all boards for the authenticated user
+      tags: [Board]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Get list of boards successful
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas.yaml#/components/schemas/BoardsListResponse'
+        '401':
+          description: Unauthorized
+          $ref: '../responses.yaml#/components/responses/ErrorResponse'
+        '500':
+          description: Internal server error
+          $ref: '../responses.yaml#/components/responses/ErrorResponse'            
+    post:
+      summary: Create a new board
+      tags: [Board]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas.yaml#/components/schemas/BoardCreateRequest'
+      responses:
+        '201':
+          description: Board created successfully
+          $ref: "../responses.yaml#/components/responses/BoardCreateSuccessResponse"
+        '401':
+          description: Unauthorized
+          $ref: '../responses.yaml#/components/responses/ErrorResponse'
+        '422':
+          description: Board create validation error
+          $ref: '../responses.yaml#/components/responses/ValidationErrorResponse'
+        '500':
+          description: Internal server error
+          $ref: '../responses.yaml#/components/responses/ErrorResponse'
