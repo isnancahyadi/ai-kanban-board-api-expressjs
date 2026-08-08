@@ -15,7 +15,7 @@ export const validateRequest =
         }));
 
         res.status(HttpStatusCode.UNPROCESSABLE_CONTENT).json({
-          status: "Failed",
+          status: "FAILED",
           message: "Validation Error",
           errors: errorMessages,
         });

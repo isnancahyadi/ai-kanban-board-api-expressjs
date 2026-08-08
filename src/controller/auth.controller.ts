@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import type { AuthenticatedRequest } from "~/middleware";
 import type { AuthServices } from "~/services/auth.service";
+import { HttpStatusCode } from "~/types";
 import { BaseController } from "./base.controller";
 
 export class AuthController extends BaseController {
@@ -13,7 +14,7 @@ export class AuthController extends BaseController {
 
   register = async (req: Request, res: Response) => {
     const user = await this.authService.register(req.body);
-    return this.sendSuccess(res, user, "User registered successfully");
+    return this.sendSuccess(res, user, "User registered successfully", HttpStatusCode.CREATED);
   };
 
   login = async (req: Request, res: Response) => {
