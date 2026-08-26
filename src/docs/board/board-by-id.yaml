@@ -74,3 +74,39 @@ paths:
         '500':
           description: Internal server error
           $ref: '../responses.yaml#/components/responses/ErrorResponse'
+    delete:
+      summary: Delete a board
+      tags: [Board]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: board_id
+          required: true
+          schema:
+            type: string
+          description: The board ID
+      responses:
+        '200':
+          description: Delete board successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: string
+        '400':
+          description: Delete board bad request
+          $ref: '../responses.yaml#/components/responses/ErrorResponse'
+        '401':
+          description: Unauthorized
+          $ref: '../responses.yaml#/components/responses/ErrorResponse'
+        '403':
+          description: Forbidden (No access to this board)
+          $ref: '../responses.yaml#/components/responses/ErrorResponse'
+        '404':
+          description: Board not found
+          $ref: '../responses.yaml#/components/responses/ErrorResponse'
+        '500':
+          description: Internal server error
+          $ref: '../responses.yaml#/components/responses/ErrorResponse'
