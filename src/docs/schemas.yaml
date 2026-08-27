@@ -6,6 +6,20 @@ paths: {}
 
 components:
   schemas:
+    AddMemberRequest:
+      title: Add member Request
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          enum:
+            - admin
+            - member
     Success:
       type: object
       properties:
@@ -284,6 +298,7 @@ components:
           type: string
         email:
           type: string
+          format: email
         password:
           type: string
         confirm_password:

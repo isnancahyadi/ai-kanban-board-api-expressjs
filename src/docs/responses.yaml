@@ -17,6 +17,36 @@ components:
                 properties:
                   errors:
                     type: "null"
+    AddMemberSuccessResponse:
+      description: Member added successfully
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: './schemas.yaml#/components/schemas/Success'
+              - type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      member:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            format: uuid
+                          email:
+                            type: string
+                            format: email
+                          name:
+                            type: string
+                          avatar_url:
+                            type: string
+                          role:
+                            type: string
+                            enum:
+                              - admin
+                              - member
     BoardCreateSuccessResponse:
       description: Board created successfully
       content:
