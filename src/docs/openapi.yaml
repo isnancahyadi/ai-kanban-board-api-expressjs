@@ -67,4 +67,6 @@ paths:
     $ref: './board/board-by-id.yaml#/paths/~1boards~1{board_id}'
   /boards/{board_id}/members:
     $ref: './board/board-by-id.yaml#/paths/~1boards~1{board_id}~1members'
+  /boards/{board_id}/members/{user_id}:
+    $ref: './board/board-by-id.yaml#/paths/~1boards~1{board_id}~1members~1{user_id}'
   
