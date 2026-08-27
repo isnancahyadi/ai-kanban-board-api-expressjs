@@ -142,3 +142,46 @@ paths:
         '500':
           description: Internal server error
           $ref: '../responses.yaml#/components/responses/ErrorResponse'
+  /boards/{board_id}/members/{user_id}:
+    delete:
+      summary: Remove a member
+      tags: [Board]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: board_id
+          required: true
+          schema:
+            type: string
+          description: The board ID
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+          description: The user ID
+      responses:
+        '200':
+          description: Remove member successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+        '400':
+          description: Remove member bad request
+          $ref: '../responses.yaml#/components/responses/ErrorResponse'
+        '401':
+          description: Unauthorized
+          $ref: '../responses.yaml#/components/responses/ErrorResponse'
+        '403':
+          description: Forbidden
+          $ref: '../responses.yaml#/components/responses/ErrorResponse'
+        '404':
+          description: Not found
+          $ref: '../responses.yaml#/components/responses/ErrorResponse'
+        '500':
+          description: Internal server error
+          $ref: '../responses.yaml#/components/responses/ErrorResponse'
