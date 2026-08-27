@@ -17,6 +17,8 @@ components:
       $ref: './schemas.yaml#/components/schemas/Success'
     Error:
       $ref: './schemas.yaml#/components/schemas/Error'
+    AddMemberRequest:
+      $ref: './schemas.yaml#/components/schemas/RegisterRequest'
     BoardCreateRequest:
       $ref: './schemas.yaml#/components/schemas/BoardCreateRequest'
     BoardsListResponse:
@@ -34,6 +36,8 @@ components:
   responses:
     ErrorResponse:
       $ref: './responses.yaml#/components/responses/ErrorResponse'
+    AddMemberSuccessResponse:
+      $ref: './responses.yaml#/components/responses/AddMemberSuccessResponse'
     BoardCreateSuccessResponse:
       $ref: './responses.yaml#/components/responses/BoardCreateSuccessResponse'
     BoardUpdateSuccessResponse:
@@ -61,4 +65,6 @@ paths:
     $ref: './board/boards.yaml#/paths/~1boards'
   /boards/{board_id}:
     $ref: './board/board-by-id.yaml#/paths/~1boards~1{board_id}'
+  /boards/{board_id}/members:
+    $ref: './board/board-by-id.yaml#/paths/~1boards~1{board_id}~1members'
   

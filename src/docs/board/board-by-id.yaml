@@ -110,3 +110,35 @@ paths:
         '500':
           description: Internal server error
           $ref: '../responses.yaml#/components/responses/ErrorResponse'
+  /boards/{board_id}/members:
+    post:
+      summary: Add a new members on board
+      tags: [Board]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: board_id
+          required: true
+          schema:
+            type: string
+          description: The board ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas.yaml#/components/schemas/AddMemberRequest'
+      responses:
+        '201':
+          description: Member added successfully
+          $ref: "../responses.yaml#/components/responses/AddMemberSuccessResponse"
+        '409':
+          description: Data conflict
+          $ref: '../responses.yaml#/components/responses/ErrorResponse'
+        '422':
+          description: Add member validation error
+          $ref: '../responses.yaml#/components/responses/ValidationErrorResponse'
+        '500':
+          description: Internal server error
+          $ref: '../responses.yaml#/components/responses/ErrorResponse'
