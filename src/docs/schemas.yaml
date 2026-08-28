@@ -31,7 +31,6 @@ components:
           example: Success
         data:
           type: object
-          format: any
     Error:
       type: object
       properties:
